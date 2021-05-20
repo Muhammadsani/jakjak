@@ -17,31 +17,7 @@ class PostController extends Controller
         return view('post');
     }
     public function submit(Request $request)
-    {
-        // $rules = [
-        //     'name'                  => 'required|min:3|max:35',
-        //     'email'                 => 'required|email|unique:users,email',
-        //     'password'              => 'required|confirmed'
-        // ];
-
-        // $messages = [
-        //     'name.required'         => 'Nama Lengkap wajib diisi',
-        //     'name.min'              => 'Nama lengkap minimal 3 karakter',
-        //     'name.max'              => 'Nama lengkap maksimal 35 karakter',
-        //     'email.required'        => 'Email wajib diisi',
-        //     'email.email'           => 'Email tidak valid',
-        //     'email.unique'          => 'Email sudah terdaftar',
-        //     'password.required'     => 'Password wajib diisi',
-        //     'password.confirmed'    => 'Password tidak sama dengan konfirmasi password'
-        // ];
-
-        // $validator = Validator::make($request->all(), $rules, $messages);
-
-        // if($validator->fails()){
-        //     return redirect()->back()->withErrors($validator)->withInput($request->all);
-        // }
-
-        
+    {        
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -69,12 +45,5 @@ class PostController extends Controller
         return back()
             ->with('success','You have successfully upload image.')
             ->with('image',$imageName); 
-        // if(true){
-        //     Session::flash('success', 'Register berhasil! Silahkan login untuk mengakses data');
-        //     return redirect()->route('post');
-        // } else {
-        //     Session::flash('errors', ['' => 'Register gagal! Silahkan ulangi beberapa saat lagi']);
-        //     return redirect()->route('post');
-        // }
     }
 }

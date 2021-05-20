@@ -21,6 +21,8 @@ Route::post('register', 'AuthController@register');
 Route::group(['middleware' => 'auth'], function () {
  
     Route::get('home', 'HomeController@index')->name('home');
+    Route::post('home', 'HomeController@like');
+    Route::get('profil', 'ProfilController@index')->name('profil');
     Route::get('post', 'PostController@index')->name('post');
     Route::post('post', 'PostController@submit');
     Route::get('logout', 'AuthController@logout')->name('logout');

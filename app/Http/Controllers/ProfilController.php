@@ -1,23 +1,24 @@
 <?php
-  
+
 namespace App\Http\Controllers;
 
-use App\Like;
-use App\Wisata;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-  
-class HomeController extends Controller
+
+class ProfilController extends Controller
 {
     public function index()
     {
+        $userId = Auth::user()->id;
         $wisatas = DB::table('fotos')
         ->leftjoin('wisatas', 'wisatas.id', '=', 'fotos.wisata_id')
         ->leftjoin('users', 'users.id', '=', 'fotos.created_by')
+        ->where('fotos.created_by','=', $userId)
         ->selectRaw('fotos.id, likes, users.name, nama_file, nama_wisata, categori, alamat, DATE_FORMAT(fotos.created_date, "%d %M %Y") as created_date')
         ->orderBy('fotos.id', 'desc')
         ->get(); 
-// dd($wisatas);
+
         $data =collect();
         foreach($wisatas as $wisata){
             $likes = DB::table('likes')
@@ -45,29 +46,6 @@ class HomeController extends Controller
         }
         // dd($data);
         // $wisatas  = $data;
-        return view('home',['wisatas' =>$data]);
-    }
-
-    public function like(Request $request){
-        $likes = DB::table('likes')
-                ->where('foto_id', '=', $request->idfoto)
-                ->where('user_id', '=', $request->iduser)
-                ->get();
-        if($likes){
-            if($likes[0]->unlike == 0){
-                $status = 1;
-            }else {
-                $status = 0;
-            }
-            $unlike = DB::table('likes')
-              ->where('id', $likes[0]->id)
-              ->update(['unlike' => $status]);
-        }else{
-            $like = new Like();
-            $like->foto_id = $request->idfoto;
-            $like->user_id = $request->iduser;
-            $like->save();
-        }
-        return redirect('/home');
+        return view('profil',['wisatas' =>$data]);
     }
 }
